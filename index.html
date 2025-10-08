@@ -3,98 +3,134 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Indodax Personal Analyzer untuk memantau harga kripto" />
     <title>Indodax Personal Analyzer</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
       rel="stylesheet"
     />
     <style>
+      :root {
+        --primary-color: #40c4ff;
+        --success-color: #4caf50;
+        --error-color: #f44336;
+        --background-dark: #1e1e2f;
+        --container-bg: #2a2a3d;
+        --text-light: #e0e0e0;
+        --text-muted: #b0b0b0;
+        --border-color: #444;
+      }
+
       body {
         font-family: "Poppins", sans-serif;
         margin: 0;
         padding: 20px;
-        background-color: #1e1e2f;
-        color: #e0e0e0;
+        background-color: var(--background-dark);
+        color: var(--text-light);
+        font-size: 16px;
+        line-height: 1.5;
       }
+
       .container {
         max-width: 1200px;
         margin: 0 auto;
-        background: #2a2a3d;
+        background: var(--container-bg);
         border-radius: 12px;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         padding: 20px;
       }
+
       h1 {
         text-align: center;
-        color: #40c4ff;
+        color: var(--primary-color);
         margin-bottom: 20px;
+        font-size: clamp(1.5rem, 5vw, 2rem);
       }
+
       .controls {
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
         gap: 10px;
       }
+
       #searchInput {
         flex: 1;
         padding: 12px;
-        border: 1px solid #444;
+        border: 1px solid var(--border-color);
         border-radius: 8px;
         font-size: 16px;
         background: #333;
-        color: #e0e0e0;
-        transition: border-color 0.3s;
+        color: var(--text-light);
+        transition: border-color 0.3s ease;
+        min-width: 200px;
       }
+
       #searchInput:focus {
-        border-color: #40c4ff;
+        border-color: var(--primary-color);
         outline: none;
       }
+
       #showFavorites {
         padding: 12px 20px;
-        background-color: #40c4ff;
-        color: #1e1e2f;
+        background-color: var(--primary-color);
+        color: var(--background-dark);
         border: none;
         border-radius: 8px;
         cursor: pointer;
         font-size: 16px;
-        transition: background-color 0.3s;
+        transition: background-color 0.3s ease;
+        touch-action: manipulation;
+        min-width: 150px;
       }
-      #showFavorites:hover {
+
+      #showFavorites:hover,
+      #showFavorites:focus {
         background-color: #0288d1;
       }
+
       .table-container {
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
       }
+
       table {
         width: 100%;
         border-collapse: collapse;
         border-spacing: 0;
       }
+
       th,
       td {
         padding: 12px;
         text-align: left;
-        border-bottom: 1px solid #444;
+        border-bottom: 1px solid var(--border-color);
       }
+
       th {
         background-color: #333;
-        color: #b0b0b0;
+        color: var(--text-muted);
         font-weight: 600;
         position: sticky;
         top: 0;
         z-index: 1;
       }
+
       tr:hover {
         background-color: #3a3a4d;
-        transition: background-color 0.2s;
+        transition: background-color 0.2s ease;
       }
+
       .price-up {
-        color: #4caf50;
+        color: var(--success-color);
       }
+
       .price-down {
-        color: #f44336;
+        color: var(--error-color);
       }
+
       .favorite-btn,
       .detail-btn {
         cursor: pointer;
@@ -102,45 +138,64 @@
         background: none;
         border: none;
         color: #666;
-        transition: color 0.3s;
+        transition: color 0.3s ease;
+        touch-action: manipulation;
       }
+
+      .favorite-btn:hover,
+      .favorite-btn:focus {
+        color: #ffca28;
+      }
+
       .favorite-btn.favorited {
         color: #ffca28;
       }
+
       .detail-btn {
-        color: #40c4ff;
+        color: var(--primary-color);
       }
-      .detail-btn:hover {
+
+      .detail-btn:hover,
+      .detail-btn:focus {
         color: #0288d1;
       }
+
       .pagination {
         display: flex;
         justify-content: center;
+        align-items: center;
         margin-top: 20px;
         gap: 10px;
       }
+
       .pagination button {
         padding: 8px 16px;
         background-color: #333;
-        border: 1px solid #444;
+        border: 1px solid var(--border-color);
         border-radius: 8px;
-        color: #e0e0e0;
+        color: var(--text-light);
         cursor: pointer;
-        transition: background-color 0.3s;
+        transition: background-color 0.3s ease;
+        touch-action: manipulation;
       }
-      .pagination button:hover {
+
+      .pagination button:hover,
+      .pagination button:focus {
         background-color: #444;
       }
+
       .pagination button.disabled {
         opacity: 0.5;
         cursor: not-allowed;
       }
+
       .last-update {
         text-align: center;
         color: #888;
         font-size: 14px;
         margin-top: 10px;
       }
+
       #detailModal {
         display: none;
         position: fixed;
@@ -153,8 +208,9 @@
         align-items: center;
         z-index: 1000;
       }
+
       .modal-content {
-        background: #2a2a3d;
+        background: var(--container-bg);
         padding: 20px;
         border-radius: 12px;
         width: 90%;
@@ -162,35 +218,63 @@
         max-height: 80vh;
         overflow-y: auto;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        color: #e0e0e0;
+        color: var(--text-light);
       }
+
       .close-btn {
         float: right;
         cursor: pointer;
         font-size: 24px;
         color: #888;
+        transition: color 0.3s ease;
       }
-      .close-btn:hover {
-        color: #e0e0e0;
+
+      .close-btn:hover,
+      .close-btn:focus {
+        color: var(--text-light);
       }
+
       .detail-section {
         margin-bottom: 30px;
       }
+
       .detail-section h3 {
-        color: #40c4ff;
-        border-bottom: 1px solid #444;
+        color: var(--primary-color);
+        border-bottom: 1px solid var(--border-color);
         padding-bottom: 5px;
       }
+
       .order-buy {
-        color: #4caf50;
+        color: var(--success-color);
       }
+
       .order-sell {
-        color: #f44336;
+        color: var(--error-color);
       }
+
+      .loading {
+        text-align: center;
+        color: var(--text-muted);
+        padding: 20px;
+      }
+
+      /* Responsive Design */
       @media (max-width: 768px) {
+        body {
+          padding: 10px;
+          font-size: 14px;
+        }
+
         .controls {
           flex-direction: column;
         }
+
+        #searchInput,
+        #showFavorites {
+          width: 100%;
+          box-sizing: border-box;
+        }
+
         table,
         thead,
         tbody,
@@ -199,22 +283,26 @@
         tr {
           display: block;
         }
+
         thead tr {
           position: absolute;
           top: -9999px;
           left: -9999px;
         }
+
         tr {
           margin-bottom: 15px;
-          border: 1px solid #444;
+          border: 1px solid var(--border-color);
           border-radius: 8px;
           padding: 10px;
         }
+
         td {
           border: none;
           position: relative;
           padding-left: 50%;
         }
+
         td:before {
           position: absolute;
           top: 6px;
@@ -223,8 +311,9 @@
           padding-right: 10px;
           white-space: nowrap;
           font-weight: bold;
-          color: #b0b0b0;
+          color: var(--text-muted);
         }
+
         td:nth-of-type(1):before {
           content: "Pair";
         }
@@ -255,6 +344,28 @@
         td:nth-of-type(10):before {
           content: "Detail";
         }
+
+        .modal-content {
+          width: 95%;
+          padding: 15px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        h1 {
+          font-size: 1.5rem;
+        }
+
+        .pagination button,
+        #showFavorites {
+          padding: 10px;
+          font-size: 14px;
+        }
+
+        .favorite-btn,
+        .detail-btn {
+          font-size: 16px;
+        }
       }
     </style>
   </head>
@@ -267,12 +378,14 @@
           type="text"
           id="searchInput"
           placeholder="Cari pair (misal: btc_idr, eth)"
+          aria-label="Cari pair kripto"
         />
-        <button id="showFavorites">Tampilkan Favorit Saja</button>
+        <button id="showFavorites" aria-label="Tampilkan favorit">Tampilkan Favorit Saja</button>
       </div>
 
       <div class="table-container">
-        <table id="tickerTable">
+        <div id="loading" class="loading" role="status">Memuat data...</div>
+        <table id="tickerTable" aria-label="Tabel harga kripto">
           <thead>
             <tr>
               <th>Pair</th>
@@ -289,18 +402,18 @@
           </thead>
           <tbody id="tickerBody"></tbody>
         </table>
-        <div class="pagination">
-          <button id="prevPage" class="disabled">Prev</button>
-          <span id="pageInfo">Page 1 of 1</span>
-          <button id="nextPage" class="disabled">Next</button>
+        <div class="pagination" role="navigation" aria-label="Navigasi halaman">
+          <button id="prevPage" class="disabled" aria-label="Halaman sebelumnya">Prev</button>
+          <span id="pageInfo" aria-live="polite">Page 1 of 1</span>
+          <button id="nextPage" class="disabled" aria-label="Halaman berikutnya">Next</button>
         </div>
-        <div class="last-update" id="lastUpdate"></div>
+        <div class="last-update" id="lastUpdate" aria-live="polite"></div>
       </div>
     </div>
 
-    <div id="detailModal">
+    <div id="detailModal" role="dialog" aria-labelledby="detailPair">
       <div class="modal-content">
-        <span class="close-btn">&times;</span>
+        <span class="close-btn" role="button" aria-label="Tutup modal">&times;</span>
         <h2 id="detailPair"></h2>
         <div id="detailInfo"></div>
         <div id="orderBookSection" class="detail-section"></div>
@@ -309,44 +422,67 @@
     </div>
 
     <script>
-      let favorites =
-        JSON.parse(localStorage.getItem("indodaxFavorites")) || [];
+      // Polyfill for fetch (for older browsers like IE)
+      if (!window.fetch) {
+        document.write(
+          '<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/3.6.2/fetch.min.js"></script>'
+        );
+      }
+
+      let favorites = [];
+      try {
+        favorites = JSON.parse(localStorage.getItem("indodaxFavorites")) || [];
+      } catch (e) {
+        console.warn("Gagal mengakses localStorage:", e);
+      }
       let allTickers = [];
       let showOnlyFavorites = false;
       let currentPage = 1;
       const itemsPerPage = 10;
+      let isFetching = false;
 
-      // Fungsi fetch data dari API Indodax
-      async function fetchWithProxy(url) {
-        let apiUrl =
-          "https://api.allorigins.win/raw?url=" + encodeURIComponent(url);
-        let fallbackUrl = "https://thingproxy.freeboard.io/fetch/" + url;
-        try {
-          let response = await fetch(apiUrl, {
-            method: "GET",
-            headers: { Accept: "application/json" },
-          });
-          if (!response.ok) {
-            response = await fetch(fallbackUrl, {
+      // Debounce function for search input
+      function debounce(func, wait) {
+        let timeout;
+        return function (...args) {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => func.apply(this, args), wait);
+        };
+      }
+
+      // Fungsi fetch dengan retry
+      async function fetchWithProxy(url, retries = 2) {
+        const apiUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent(url);
+        const fallbackUrl = "https://thingproxy.freeboard.io/fetch/" + url;
+        let lastError;
+
+        for (let i = 0; i <= retries; i++) {
+          try {
+            const response = await fetch(i === retries ? fallbackUrl : apiUrl, {
               method: "GET",
               headers: { Accept: "application/json" },
             });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.json();
+          } catch (error) {
+            lastError = error;
+            if (i < retries) {
+              await new Promise((resolve) => setTimeout(resolve, 1000));
+            }
           }
-          if (!response.ok) throw new Error(`HTTP ${response.status}`);
-          return await response.json();
-        } catch (error) {
-          throw new Error(`Gagal fetch ${url}: ${error.message}`);
         }
+        throw new Error(`Gagal fetch ${url}: ${lastError.message}`);
       }
 
       async function fetchTickers() {
+        if (isFetching) return;
+        isFetching = true;
+        const loading = document.getElementById("loading");
+        loading.style.display = "block";
+        document.getElementById("tickerTable").style.display = "none";
+
         try {
           const data = await fetchWithProxy("https://indodax.com/api/tickers");
-          console.log(
-            "Data diterima (jumlah pairs):",
-            Object.keys(data.tickers || {}).length
-          );
-
           if (!data.tickers) {
             throw new Error("Respons tidak valid: Tidak ada data tickers");
           }
@@ -357,29 +493,29 @@
           }));
 
           updateTable();
-
           document.getElementById(
             "lastUpdate"
           ).innerHTML = `Terakhir diupdate: ${new Date().toLocaleString(
             "id-ID"
-          )} <br><span style="color: #4caf50;">Status: Berhasil (Data: ${
+          )} <br><span style="color: var(--success-color);">Status: Berhasil (Data: ${
             allTickers.length
           } pairs)</span>`;
         } catch (error) {
           console.error("Error lengkap:", error);
           document.getElementById(
             "lastUpdate"
-          ).innerHTML = `Gagal: ${error.message} <br><span style="color: #f44336;">Lihat Console (F12) untuk detail. Mencoba lagi dalam 30 detik...</span>`;
+          ).innerHTML = `Gagal: ${error.message} <br><span style="color: var(--error-color);">Lihat Console (F12) untuk detail. Mencoba lagi dalam 30 detik...</span>`;
+        } finally {
+          isFetching = false;
+          loading.style.display = "none";
+          document.getElementById("tickerTable").style.display = "table";
         }
       }
 
-      // Fungsi update tabel dengan pagination
       function updateTable() {
         const tbody = document.getElementById("tickerBody");
         tbody.innerHTML = "";
-        const searchTerm = document
-          .getElementById("searchInput")
-          .value.toLowerCase();
+        const searchTerm = document.getElementById("searchInput").value.toLowerCase();
 
         let filteredTickers = allTickers.filter((ticker) => {
           const matchesSearch = ticker.pair.toLowerCase().includes(searchTerm);
@@ -387,16 +523,21 @@
           return matchesSearch && (!showOnlyFavorites || isFavorite);
         });
 
+        if (filteredTickers.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="10" class="loading">Tidak ada data yang sesuai</td></tr>';
+          document.getElementById("pageInfo").textContent = "Page 1 of 1";
+          document.getElementById("prevPage").classList.add("disabled");
+          document.getElementById("nextPage").classList.add("disabled");
+          return;
+        }
+
         const totalPages = Math.ceil(filteredTickers.length / itemsPerPage);
+        currentPage = Math.min(currentPage, totalPages);
         document.getElementById(
           "pageInfo"
         ).textContent = `Page ${currentPage} of ${totalPages}`;
-        document
-          .getElementById("prevPage")
-          .classList.toggle("disabled", currentPage === 1);
-        document
-          .getElementById("nextPage")
-          .classList.toggle("disabled", currentPage === totalPages);
+        document.getElementById("prevPage").classList.toggle("disabled", currentPage === 1);
+        document.getElementById("nextPage").classList.toggle("disabled", currentPage === totalPages);
 
         const start = (currentPage - 1) * itemsPerPage;
         const end = start + itemsPerPage;
@@ -406,63 +547,62 @@
           const buyPrice = parseFloat(ticker.buy || 0);
           const priceClass = lastPrice > buyPrice ? "price-up" : "price-down";
           row.innerHTML = `
-                    <td>${ticker.pair}</td>
-                    <td class="${priceClass}">${formatRupiah(lastPrice)}</td>
-                    <td>${formatRupiah(ticker.high || 0)}</td>
-                    <td>${formatRupiah(ticker.low || 0)}</td>
-                    <td>${parseFloat(ticker.vol_idr || 0).toLocaleString()}</td>
-                    <td>${formatRupiah(buyPrice)}</td>
-                    <td>${formatRupiah(ticker.sell || 0)}</td>
-                    <td>${new Date(ticker.server_time * 1000).toLocaleString(
-                      "id-ID"
-                    )}</td>
-                    <td><button class="favorite-btn ${
-                      favorites.includes(ticker.pair) ? "favorited" : ""
-                    }" data-pair="${ticker.pair}">⭐</button></td>
-                    <td><button class="detail-btn" data-pair="${
-                      ticker.pair
-                    }">📊</button></td>
-                `;
+            <td>${ticker.pair}</td>
+            <td class="${priceClass}">${formatRupiah(lastPrice)}</td>
+            <td>${formatRupiah(ticker.high || 0)}</td>
+            <td>${formatRupiah(ticker.low || 0)}</td>
+            <td>${parseFloat(ticker.vol_idr || 0).toLocaleString("id-ID")}</td>
+            <td>${formatRupiah(buyPrice)}</td>
+            <td>${formatRupiah(ticker.sell || 0)}</td>
+            <td>${new Date(ticker.server_time * 1000).toLocaleString("id-ID")}</td>
+            <td><button class="favorite-btn ${
+              favorites.includes(ticker.pair) ? "favorited" : ""
+            }" data-pair="${ticker.pair}" aria-label="Tambah ke favorit ${
+              ticker.pair
+            }">⭐</button></td>
+            <td><button class="detail-btn" data-pair="${
+              ticker.pair
+            }" aria-label="Lihat detail ${ticker.pair}">📊</button></td>
+          `;
         });
       }
 
-      // Fungsi format Rupiah
       function formatRupiah(amount) {
         if (isNaN(amount) || amount === 0) return "Rp 0";
-        return new Intl.NumberFormat("id-ID", {
-          style: "currency",
-          currency: "IDR",
-          minimumFractionDigits: 0,
-        }).format(amount);
+        try {
+          return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            minimumFractionDigits: 0,
+          }).format(amount);
+        } catch (e) {
+          console.warn("Intl.NumberFormat tidak didukung, menggunakan format manual:", e);
+          return `Rp ${amount.toLocaleString("id-ID")}`;
+        }
       }
 
-      // Fungsi tampilkan detail dengan order book & trade history
       async function showDetail(pair) {
         const ticker = allTickers.find((t) => t.pair === pair);
         if (!ticker) return;
 
-        document.getElementById(
-          "detailPair"
-        ).textContent = `Detail untuk ${pair.toUpperCase()}`;
+        document.getElementById("detailPair").textContent = `Detail untuk ${pair.toUpperCase()}`;
         document.getElementById("detailInfo").innerHTML = `
-        <p>Harga Terakhir: ${formatRupiah(ticker.last)}</p>
-        <p>High 24h: ${formatRupiah(ticker.high)}</p>
-        <p>Low 24h: ${formatRupiah(ticker.low)}</p>
-        <p>Volume: ${parseFloat(ticker.vol_idr).toLocaleString()}</p>
-    `;
+          <p>Harga Terakhir: ${formatRupiah(ticker.last)}</p>
+          <p>High 24h: ${formatRupiah(ticker.high)}</p>
+          <p>Low 24h: ${formatRupiah(ticker.low)}</p>
+          <p>Volume: ${parseFloat(ticker.vol_idr).toLocaleString("id-ID")}</p>
+        `;
 
-        // ===== Fetch Order Book (modifikasi tampilan kiri-kanan) =====
         let orderBookSection = document.getElementById("orderBookSection");
+        orderBookSection.innerHTML = '<p class="loading">Memuat order book...</p>';
         try {
-          const orderData = await fetchWithProxy(
-            `https://indodax.com/api/${pair}/depth`
-          );
-          const buys = orderData.buy.slice(0, 10);
-          const sells = orderData.sell.slice(0, 10);
+          const orderData = await fetchWithProxy(`https://indodax.com/api/${pair}/depth`);
+          const buys = orderData.buy?.slice(0, 10) || [];
+          const sells = orderData.sell?.slice(0, 10) || [];
 
           const sellTable = `
-            <h4 style="text-align:center; color:#f44336;">Sell Orders</h4>
-            <table style="width:100%; border-collapse:collapse;">
+            <h4 style="text-align:center; color:var(--error-color);">Sell Orders</h4>
+            <table style="width:100%; border-collapse:collapse;" aria-label="Tabel order jual">
                 <thead>
                     <tr>
                         <th style="text-align:right;">Harga (IDR)</th>
@@ -471,30 +611,28 @@
                     </tr>
                 </thead>
                 <tbody>
-                    ${sells
-                      .map(([price, qty]) => {
-                        const total = price * qty;
-                        return `
-                            <tr class="order-sell">
-                                <td style="text-align:right;">${formatRupiah(
-                                  price
-                                )}</td>
-                                <td style="text-align:right;">${parseFloat(
-                                  qty
-                                ).toFixed(4)}</td>
-                                <td style="text-align:right;">${formatRupiah(
-                                  total
-                                )}</td>
-                            </tr>`;
-                      })
-                      .join("")}
+                    ${
+                      sells.length
+                        ? sells
+                            .map(([price, qty]) => {
+                              const total = price * qty;
+                              return `
+                                <tr class="order-sell">
+                                    <td style="text-align:right;">${formatRupiah(price)}</td>
+                                    <td style="text-align:right;">${parseFloat(qty).toFixed(4)}</td>
+                                    <td style="text-align:right;">${formatRupiah(total)}</td>
+                                </tr>`;
+                            })
+                            .join("")
+                        : '<tr><td colspan="3">Tidak ada data</td></tr>'
+                    }
                 </tbody>
             </table>
-        `;
+          `;
 
           const buyTable = `
-            <h4 style="text-align:center; color:#4caf50;">Buy Orders</h4>
-            <table style="width:100%; border-collapse:collapse;">
+            <h4 style="text-align:center; color:var(--success-color);">Buy Orders</h4>
+            <table style="width:100%; border-collapse:collapse;" aria-label="Tabel order beli">
                 <thead>
                     <tr>
                         <th style="text-align:right;">Harga (IDR)</th>
@@ -503,49 +641,43 @@
                     </tr>
                 </thead>
                 <tbody>
-                    ${buys
-                      .map(([price, qty]) => {
-                        const total = price * qty;
-                        return `
-                            <tr class="order-buy">
-                                <td style="text-align:right;">${formatRupiah(
-                                  price
-                                )}</td>
-                                <td style="text-align:right;">${parseFloat(
-                                  qty
-                                ).toFixed(4)}</td>
-                                <td style="text-align:right;">${formatRupiah(
-                                  total
-                                )}</td>
-                            </tr>`;
-                      })
-                      .join("")}
+                    ${
+                      buys.length
+                        ? buys
+                            .map(([price, qty]) => {
+                              const total = price * qty;
+                              return `
+                                <tr class="order-buy">
+                                    <td style="text-align:right;">${formatRupiah(price)}</td>
+                                    <td style="text-align:right;">${parseFloat(qty).toFixed(4)}</td>
+                                    <td style="text-align:right;">${formatRupiah(total)}</td>
+                                </tr>`;
+                            })
+                            .join("")
+                        : '<tr><td colspan="3">Tidak ada data</td></tr>'
+                    }
                 </tbody>
             </table>
-        `;
+          `;
 
           orderBookSection.innerHTML = `
             <h3>Order Book (Top 10)</h3>
             <div style="display:flex; gap:20px; justify-content:space-between; flex-wrap:wrap;">
-                <div style="flex:1; min-width:350px;">${sellTable}</div>
-                <div style="flex:1; min-width:350px;">${buyTable}</div>
+                <div style="flex:1; min-width:300px;">${sellTable}</div>
+                <div style="flex:1; min-width:300px;">${buyTable}</div>
             </div>
-        `;
+          `;
         } catch (error) {
-          orderBookSection.innerHTML = `<p>Gagal memuat order book: ${error.message}</p>`;
+          orderBookSection.innerHTML = `<p style="color:var(--error-color);">Gagal memuat order book: ${error.message}</p>`;
         }
 
-        // ===== Fetch Trade History =====
-        let tradeHistorySection = document.getElementById(
-          "tradeHistorySection"
-        );
+        let tradeHistorySection = document.getElementById("tradeHistorySection");
+        tradeHistorySection.innerHTML = '<p class="loading">Memuat history...</p>';
         try {
-          const tradeData = await fetchWithProxy(
-            `https://indodax.com/api/${pair}/trades`
-          );
+          const tradeData = await fetchWithProxy(`https://indodax.com/api/${pair}/trades`);
           tradeHistorySection.innerHTML = `
             <h3>History Jual Beli (50 Terakhir)</h3>
-            <table style="width: 100%;">
+            <table style="width:100%;" aria-label="Tabel riwayat transaksi">
                 <thead>
                     <tr>
                         <th>Date</th>
@@ -556,38 +688,45 @@
                     </tr>
                 </thead>
                 <tbody>
-                    ${tradeData
-                      .map((trade) => {
-                        const total = trade.price * trade.amount;
-                        const typeClass =
-                          trade.type === "buy" ? "price-up" : "price-down";
-                        return `
-                            <tr>
-                                <td>${new Date(
-                                  trade.date * 1000
-                                ).toLocaleString("id-ID")}</td>
-                                <td class="${typeClass}">${trade.type.toUpperCase()}</td>
-                                <td>${formatRupiah(trade.price)}</td>
-                                <td>${parseFloat(trade.amount).toFixed(4)}</td>
-                                <td>${formatRupiah(total)}</td>
-                            </tr>`;
-                      })
-                      .join("")}
+                    ${
+                      tradeData.length
+                        ? tradeData
+                            .slice(0, 50)
+                            .map((trade) => {
+                              const total = trade.price * trade.amount;
+                              const typeClass = trade.type === "buy" ? "price-up" : "price-down";
+                              return `
+                                <tr>
+                                    <td>${new Date(trade.date * 1000).toLocaleString("id-ID")}</td>
+                                    <td class="${typeClass}">${trade.type.toUpperCase()}</td>
+                                    <td>${formatRupiah(trade.price)}</td>
+                                    <td>${parseFloat(trade.amount).toFixed(4)}</td>
+                                    <td>${formatRupiah(total)}</td>
+                                </tr>`;
+                            })
+                            .join("")
+                        : '<tr><td colspan="5">Tidak ada data</td></tr>'
+                    }
                 </tbody>
             </table>
-        `;
+          `;
         } catch (error) {
-          tradeHistorySection.innerHTML = `<p>Gagal memuat history trades: ${error.message}</p>`;
+          tradeHistorySection.innerHTML = `<p style="color:var(--error-color);">Gagal memuat history trades: ${error.message}</p>`;
         }
 
         document.getElementById("detailModal").style.display = "flex";
       }
 
       // Event listeners
-      document.getElementById("searchInput").addEventListener("input", () => {
-        currentPage = 1;
-        updateTable();
-      });
+      const searchInput = document.getElementById("searchInput");
+      searchInput.addEventListener(
+        "input",
+        debounce(() => {
+          currentPage = 1;
+          updateTable();
+        }, 300)
+      );
+
       document.getElementById("showFavorites").addEventListener("click", () => {
         showOnlyFavorites = !showOnlyFavorites;
         document.getElementById("showFavorites").textContent = showOnlyFavorites
@@ -596,12 +735,14 @@
         currentPage = 1;
         updateTable();
       });
+
       document.getElementById("prevPage").addEventListener("click", () => {
         if (currentPage > 1) {
           currentPage--;
           updateTable();
         }
       });
+
       document.getElementById("nextPage").addEventListener("click", () => {
         const totalPages = Math.ceil(allTickers.length / itemsPerPage);
         if (currentPage < totalPages) {
@@ -609,6 +750,7 @@
           updateTable();
         }
       });
+
       document.getElementById("tickerBody").addEventListener("click", (e) => {
         if (e.target.classList.contains("favorite-btn")) {
           const pair = e.target.dataset.pair;
@@ -616,26 +758,41 @@
           if (index > -1) {
             favorites.splice(index, 1);
             e.target.classList.remove("favorited");
+            e.target.setAttribute("aria-label", `Tambah ke favorit ${pair}`);
           } else {
             favorites.push(pair);
             e.target.classList.add("favorited");
+            e.target.setAttribute("aria-label", `Hapus dari favorit ${pair}`);
           }
-          localStorage.setItem("indodaxFavorites", JSON.stringify(favorites));
+          try {
+            localStorage.setItem("indodaxFavorites", JSON.stringify(favorites));
+          } catch (e) {
+            console.warn("Gagal menyimpan ke localStorage:", e);
+          }
           updateTable();
         } else if (e.target.classList.contains("detail-btn")) {
           showDetail(e.target.dataset.pair);
         }
       });
+
       document.querySelector(".close-btn").addEventListener("click", () => {
         document.getElementById("detailModal").style.display = "none";
       });
+
       window.addEventListener("click", (e) => {
         if (e.target === document.getElementById("detailModal")) {
           document.getElementById("detailModal").style.display = "none";
         }
       });
 
-      // Load awal dan auto-refresh setiap 30 detik
+      // Keyboard navigation for accessibility
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          document.getElementById("detailModal").style.display = "none";
+        }
+      });
+
+      // Load awal dan auto-refresh
       fetchTickers();
       setInterval(fetchTickers, 30000);
     </script>
