@@ -683,7 +683,6 @@
                         <th>Date</th>
                         <th>Type</th>
                         <th>Harga (IDR)</th>
-                        <th>Fee</th>
                         <th>Jumlah</th>
                         <th>Total</th>
                     </tr>
@@ -700,7 +699,6 @@
                                 <tr>
                                     <td>${new Date(trade.date * 1000).toLocaleString("id-ID")}</td>
                                     <td class="${typeClass}">${trade.type.toUpperCase()}</td>
-                                    <td>${formatRupiah(trade.fee)}</td>
                                     <td>${formatRupiah(trade.price)}</td>
                                     <td>${parseFloat(trade.amount).toFixed(4)}</td>
                                     <td>${formatRupiah(total)}</td>
